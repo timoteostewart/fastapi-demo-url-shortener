@@ -1,5 +1,7 @@
+from string import ascii_letters, digits
+
 db_filename = "./db.sqlite3"
 
 # short url parameters
-alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-short_url_length = 5
+alphabet = ascii_letters + digits
+SHORT_URL_LENGTH = 5
