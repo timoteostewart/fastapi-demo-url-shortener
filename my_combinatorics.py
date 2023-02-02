@@ -1,4 +1,4 @@
-from random import choices
+import random
 
 import config
 import my_db
@@ -8,7 +8,7 @@ def generate_code(length=config.SHORT_URL_LENGTH):
     """
     Create an alphanumeric code of length `length`
     """
-    return "".join(choices(config.alphabet, k=length))
+    return "".join(random.choices(config.alphabet, k=length))
 
 
 def get_short_url():
