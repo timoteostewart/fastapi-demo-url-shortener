@@ -11,6 +11,7 @@ Creating a toy URL shortening service has been on my mind for months, and since 
 - Uses a super simple SQLite database
 
 # Ideas for Improvement
+- Add [testing](https://fastapi.tiangolo.com/tutorial/testing/) via `pytest`
 - Add `delete` functionality to delete a short URL from the database
 - Use a central data store and multiple shortlink servers (e.g., an autoscaling group)
 - Set up multiple read replicas of the data store to speed up redirections
