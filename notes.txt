@@ -1,0 +1,28 @@
+
+API rough draft:
+
+GET /
+Show instructions
+
+GET /SHORTURL/KEY
+Display this short url’s stats (creation date, times used, list of referrers, etc.)
+
+GET /SHORTURL
+Be http redirected to the corresponding full URL
+
+POST /?url=FULLURL&short_url=SHORTURL
+Receive a json response body containing a short url and an admin key and the current stats; if the optional SHORTURL is provided and available, use that for the short url
+
+DELETE /SHORTURL/KEY
+Delete this short url’s entry from the database
+
+PATCH /SHORTURL/KEY?url=FULLURL
+Update the full url associated with this short url and reset stats
+
+PUT /SHORTURL/KEY?url=FULLURL
+Update the full url associated with this short url but preserve all stats
+
+Alphabet for short url: a-zA-Z0-9
+Alphabet for key: SHA256 of time plus url plus random
+Alphabet for superkey: same as key
+
