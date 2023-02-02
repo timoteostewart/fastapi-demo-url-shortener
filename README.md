@@ -4,7 +4,7 @@
 Creating a toy URL shortening service has been on my mind for months, and since I've been learning about FastAPI this week, I had the perfect opportunity to finally turn this dream into a reality.
 
 # Key Features
-- Designed to be used via API or via command line `curl`
+- Create shortlinks via API or via command line `curl`
 - Maintains an access count of how many times the short URL has been accessed
 - Stores when the short URL was generated
 - Provides security by requiring a 16-digit admin key to be included to see stats
