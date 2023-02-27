@@ -85,55 +85,6 @@ def close_db_connection():
     conn.close()
 
 
-def retrieve_full_url_from_short_url(short_url):
-    """
-    Get the `full_url` associated with a `short_url`, and increment the `access_count`
-    """
-    res = cur.execute(f"SELECT full_url FROM urls WHERE short_url = ?;", (short_url,))
-    full_url = res.fetchone()[0]
-
-    stmt = "UPDATE urls SET access_count = access_count + 1 WHERE short_url = ?;"
-    res = cur.execute(stmt, (short_url,))
-    conn.commit()
-
-    return full_url
-
-
-def short_url_already_exists(short_url):
-    """
-    Utility function to test if a `short_url` is already in use in the database.
-    """
-    res = cur.execute(f"SELECT count(*) FROM urls WHERE short_url = ?;", (short_url,))
-    if int(res.fetchone()[0]) == 0:
-        return False
-    else:
-        return True
-
-
-def retrieve_shortlink(short_url, admin_key):
-    """
-    Show stats for the shortlink, if the provided `short_url` and `admin_key` are valid.
-    """
-    raw_res = cur.execute(
-        f"SELECT * FROM urls WHERE short_url = ? and admin_key = ?;",
-        (
-            short_url,
-            admin_key,
-        ),
-    )
-    res = raw_res.fetchone()
-    if not res:
-        raise Exception("invalid short_url or admin_key")
-
-    return Shortlink(
-        full_url=res[0],
-        short_url=res[1],
-        admin_key=res[2],
-        when_created_unix=res[3],
-        access_count=res[4],
-    )
-
-
 def create_shortlink(full_url=None, short_url=None, only_this_short_url=False):
     """
     Request a shortlink for the provided `full_url`.
@@ -171,6 +122,66 @@ def create_shortlink(full_url=None, short_url=None, only_this_short_url=False):
     conn.commit()
 
     return shortlink
+
+
+def delete_short_url(short_url=None):
+    """
+    Delete `short_url` from database
+    """
+    try:
+        cur.execute(f"DELETE FROM urls WHERE short_url = ?;", (short_url,))
+        conn.commit()
+    except Exception as exc:
+        raise exc
+
+
+def retrieve_full_url_from_short_url(short_url):
+    """
+    Get the `full_url` associated with a `short_url`, and increment the `access_count`
+    """
+    res = cur.execute(f"SELECT full_url FROM urls WHERE short_url = ?;", (short_url,))
+    full_url = res.fetchone()[0]
+
+    stmt = "UPDATE urls SET access_count = access_count + 1 WHERE short_url = ?;"
+    res = cur.execute(stmt, (short_url,))
+    conn.commit()
+
+    return full_url
+
+
+def retrieve_shortlink(short_url, admin_key):
+    """
+    Show stats for the shortlink, if the provided `short_url` and `admin_key` are valid.
+    """
+    raw_res = cur.execute(
+        f"SELECT * FROM urls WHERE short_url = ? and admin_key = ?;",
+        (
+            short_url,
+            admin_key,
+        ),
+    )
+    res = raw_res.fetchone()
+    if not res:
+        raise Exception("invalid short_url or admin_key")
+
+    return Shortlink(
+        full_url=res[0],
+        short_url=res[1],
+        admin_key=res[2],
+        when_created_unix=res[3],
+        access_count=res[4],
+    )
+
+
+def short_url_already_exists(short_url):
+    """
+    Utility function to test if a `short_url` is already in use in the database.
+    """
+    res = cur.execute(f"SELECT count(*) FROM urls WHERE short_url = ?;", (short_url,))
+    if int(res.fetchone()[0]) == 0:
+        return False
+    else:
+        return True
 
 
 def update_short_url(

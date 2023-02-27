@@ -93,5 +93,15 @@ async def delete_shortlink(short_url=None, admin_key=None):
     """
     Delete a shortlink from the database. This will free up its `short_url` for re-use.
     """
-    pass
-    # TODO
+    # check for valid `short_url` and `admin_key`
+    try:
+        shortlink = my_db.retrieve_shortlink(short_url, admin_key)
+    except Exception as exc:
+        return {"error": exc}
+
+    try:
+        my_db.delete_short_url(short_url)
+    except Exception as exc:
+        return {"error": exc}
+
+    return {"result": f"short_url `{short_url}` deleted"}
