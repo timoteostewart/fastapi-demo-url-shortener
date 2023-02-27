@@ -7,12 +7,12 @@ Creating a toy URL shortening service has been on my mind for months, and since 
 - Create shortlinks via API or via command line `curl`
 - Maintains an access count of how many times the short URL has been accessed
 - Stores when the short URL was generated
-- Provides security by requiring a 16-digit admin key to be included to see stats
+- Provides security by requiring a 16-character admin key to be included to see stats
+- Allows deletion of a shortlink (if requester provides the associated admin key)
 - Uses a super simple SQLite database
 
 # Ideas for Improvement
 - Add [testing](https://fastapi.tiangolo.com/tutorial/testing/) via `pytest`
-- Add functionality to delete a short URL from the database (e.g., `DELETE /{short_url}/{admin_key}`)
 - Add functionality to update the full URL associated with a short url (e.g., `PUT /{short_url}/{admin_key}?full_url={full_url}`)
 - Use a central data store and multiple shortlink servers (e.g., an autoscaling group)
 - Set up multiple read replicas of the data store to speed up redirections
