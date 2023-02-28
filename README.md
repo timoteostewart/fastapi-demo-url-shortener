@@ -1,7 +1,7 @@
 
 # Background
 
-Creating a toy URL shortening service has been on my mind for months, and since I've been learning about FastAPI this week, I had the perfect opportunity to finally turn this dream into a reality.
+Writing a simple URL shortening service has been on my mind for months, and since I've been learning about FastAPI recently, I had the perfect opportunity to turn this small dream into a reality.
 
 # Key Features
 - Create shortlinks via API or via command line `curl`
