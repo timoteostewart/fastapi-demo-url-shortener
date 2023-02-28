@@ -14,7 +14,7 @@ import my_db
 
 my_db.establish_db_connection()
 
-app = FastAPI()
+app = FastAPI(root_path="/fastapi-demo-url-shortener")  # Dear User: delete or modify this `root_path` argument as your needs dictate
 
 
 def get_status():
@@ -36,7 +36,8 @@ async def root():
     <title>short URL API</title>
     </head>
     <body>
-    <p>Welcome to a toy short URL service. Read <a href="http://localhost:8000/docs/">the API</a>.</p>
+    <p>This is a URL shortener written in Python using FastAPI with SQLite3 for persistent storage.<br/>
+    Take it for a test drive using <a href="/fastapi-demo-url-shortener/docs">its OpenAPI interface</a>.</p>
     </body>
     </html>
     """
@@ -53,7 +54,7 @@ async def status():
 
 
 @app.get("/{short_url}")
-async def process_short_url(short_url):
+async def redirect_from_short_url_to_long_url(short_url):
     """
     Redirect visitor to full_url, if short_url is valid.
     """
@@ -65,7 +66,7 @@ async def process_short_url(short_url):
 
 
 @app.get("/{short_url}/{admin_key}")
-async def process_short_url_and_admin_key(short_url=None, admin_key=None):
+async def get_stats_for_short_url(short_url=None, admin_key=None):
     """
     Respond with the shortlink's statistics, if the `short_url` and `admin_key` are valid.
     """
@@ -77,19 +78,19 @@ async def process_short_url_and_admin_key(short_url=None, admin_key=None):
 
 
 @app.post("/")
-async def create_shortlink(full_url: str, short_url: str | None = Query(default=None)):
+async def create_short_url(full_url: str, short_url: str | None = Query(default=None)):
     """
     Given a `full_url`, create a shortlink and return its details
     """
     try:
-        shortlink = my_db.create_shortlink(full_url=full_url, short_url=short_url)
+        shortlink = my_db.create_short_url(full_url=full_url, short_url=short_url)
         return shortlink
     except Exception as exc:
         return {"error": exc}
 
 
 @app.delete("/{short_url}/{admin_key}")
-async def delete_shortlink(short_url=None, admin_key=None):
+async def delete_short_url(short_url=None, admin_key=None):
     """
     Delete a shortlink from the database. This will free up its `short_url` for re-use.
     """

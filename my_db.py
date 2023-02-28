@@ -85,7 +85,7 @@ def close_db_connection():
     conn.close()
 
 
-def create_shortlink(full_url=None, short_url=None, only_this_short_url=False):
+def create_short_url(full_url=None, short_url=None, only_this_short_url=False):
     """
     Request a shortlink for the provided `full_url`.
     Option to request a specific `short_url`.
