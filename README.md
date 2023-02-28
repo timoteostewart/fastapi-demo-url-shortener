@@ -25,16 +25,16 @@ Creating a toy URL shortening service has been on my mind for months, and since 
 1. Clone the repo. Here's a pretty typical way on most platforms.
 
 ```bash
-mkdir fastapi-demo-shorturl-service
+mkdir fastapi-demo-url-shortener
 gh auth login
-gh repo clone timoteostewart/fastapi-demo-shorturl-service ./fastapi-demo-shorturl-service
+gh repo clone timoteostewart/fastapi-demo-url-shortener ./fastapi-demo-url-shortener
 
 ```
 
 2. Create a virtual environment.
 
 ```bash
-cd fastapi-demo-shorturl-service
+cd fastapi-demo-url-shortener
 python -m venv .venv
 . ./.venv/bin/activate # (or & ./.venv/Scripts/Activate.ps1 on Windows)
 ```
