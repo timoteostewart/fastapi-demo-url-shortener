@@ -1,4 +1,6 @@
+import os
 from enum import Enum
+from typing import Union
 
 from fastapi import FastAPI, Query
 from fastapi.responses import HTMLResponse
@@ -11,6 +13,8 @@ import my_db
 
 # start test server:
 # uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+root = os.path.dirname(os.path.abspath(__file__))
 
 my_db.establish_db_connection()
 
@@ -31,15 +35,29 @@ async def root():
     """
 
     html_content = """
-    <html>
-    <head>
-    <title>short URL API</title>
-    </head>
-    <body>
-    <p>This is a URL shortener written in Python using FastAPI with SQLite3 for persistent storage.<br/>
-    Take it for a test drive using <a href="/fastapi-demo-url-shortener/docs">its OpenAPI interface</a>.</p>
-    </body>
-    </html>
+<html>
+<head>
+<title>URL shortener API using FastAPI</title>
+</head>
+<body>
+<p>This is a URL shortener written in Python using FastAPI with SQLite3 for persistent storage.</p>
+<p>Take it for a test drive using <a href="/fastapi-demo-url-shortener/docs">its OpenAPI interface</a>.</p>
+
+<p>Alternatively, interact with it via `curl` from a terminal:</p>
+
+<p>PowerShell:<br/>
+curl -X 'POST' `<br/>
+'https://www.timstewart.io/fastapi-demo-url-shortener/?full_url=https://dev.thnr.net' `<br/>
+-H 'accept: application/json'</p>
+
+<p>*sh:<br/>
+curl -X 'POST' \ <br/>
+'https://www.timstewart.io/fastapi-demo-url-shortener/?full_url=https://dev.thnr.net' \ <br/>
+-H 'accept: application/json'</p>
+
+</body>
+</html>
+
     """
     return HTMLResponse(content=html_content, status_code=200)
 
@@ -74,11 +92,11 @@ async def get_stats_for_short_url(short_url=None, admin_key=None):
         shortlink = my_db.retrieve_shortlink(short_url, admin_key)
         return shortlink
     except Exception as exc:
-        return {"error": exc}
+        return {"error": str(exc)}
 
 
 @app.post("/")
-async def create_short_url(full_url: str, short_url: str | None = Query(default=None)):
+async def create_short_url(full_url: str, short_url: Union[str, None] = None):
     """
     Given a `full_url`, create a shortlink and return its details
     """
@@ -86,7 +104,7 @@ async def create_short_url(full_url: str, short_url: str | None = Query(default=
         shortlink = my_db.create_short_url(full_url=full_url, short_url=short_url)
         return shortlink
     except Exception as exc:
-        return {"error": exc}
+        return {"error": str(exc)}
 
 
 @app.delete("/{short_url}/{admin_key}")
@@ -98,11 +116,11 @@ async def delete_short_url(short_url=None, admin_key=None):
     try:
         shortlink = my_db.retrieve_shortlink(short_url, admin_key)
     except Exception as exc:
-        return {"error": exc}
+        return {"error": str(exc)}
 
     try:
         my_db.delete_short_url(short_url)
     except Exception as exc:
-        return {"error": exc}
+        return {"error": str(exc)}
 
     return {"result": f"short_url `{short_url}` deleted"}
