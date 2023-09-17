@@ -12,27 +12,33 @@ from starlette.responses import RedirectResponse
 import config
 import my_db
 
-# pip install wheel black isort
-# pip install fastapi[all] slowapi
+# pip install fastapi[all] gunicorn slowapi
 
 # start test server:
 # uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+# start prod server:
+# /srv/foo/bar/app/gunicorn -c gunicorn_conf.py main:app
+
 
 root = os.path.dirname(os.path.abspath(__file__))
 
 my_db.establish_db_connection()
 
+base_url = os.getenv("FASTAPI_BASE_URL", "http://localhost:8000")
+root_path = os.getenv("FASTAPI_ROOT_PATH", "/")
+
+print(base_url, root_path)
+
 limiter = Limiter(key_func=get_remote_address)
-app = FastAPI(
-    root_path="/fastapi-demo-url-shortener/"
-)  # Dear User: delete or modify this `root_path` argument as your needs dictate
+app = FastAPI(root_path=root_path)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
 def get_status(request: Request):
     """
-    Currently hardcoded as `OK` but could easily be made dynamic and informative.
+    Currently hardcoded as `OK` but could easily report errors, number of active shortlinks, etc.
     """
     return "OK"
 
@@ -43,25 +49,25 @@ async def root(request: Request):
     Respond with instructions.
     """
 
-    html_content = """
+    html_content = f"""
 <html>
 <head>
 <title>URL shortener API using FastAPI</title>
 </head>
 <body>
 <p>This is a URL shortener written in Python using FastAPI with SQLite3 for persistent storage. <a href="https://github.com/timoteostewart/fastapi-demo-url-shortener">Source code on GitHub.</a></p>
-<p>Take it for a test drive using <a href="/fastapi-demo-url-shortener/docs">its OpenAPI interface</a>.</p>
+<p>Take it for a test drive using <a href="{root_path}docs">its OpenAPI interface</a>.</p>
 
 <p>Alternatively, interact with it via `curl` from your terminal:</p>
 
 <p>PowerShell:<br/>
 curl -X 'POST' `<br/>
-'https://www.timstewart.io/fastapi-demo-url-shortener/?full_url=https://dev.thnr.net' `<br/>
+'{base_url}{root_path}?full_url=https://dev.thnr.net' `<br/>
 -H 'accept: application/json'</p>
 
 <p>*sh:<br/>
 curl -X 'POST' \ <br/>
-'https://www.timstewart.io/fastapi-demo-url-shortener/?full_url=https://dev.thnr.net' \ <br/>
+'{base_url}{root_path}?full_url=https://dev.thnr.net' \ <br/>
 -H 'accept: application/json'</p>
 
 </body>
