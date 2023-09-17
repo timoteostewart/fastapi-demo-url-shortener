@@ -49,10 +49,10 @@ async def root(request: Request):
 <title>URL shortener API using FastAPI</title>
 </head>
 <body>
-<p>This is a URL shortener written in Python using FastAPI with SQLite3 for persistent storage.</p>
-<p>Take it for a test drive using <a href="/docs">its OpenAPI interface</a>.</p>
+<p>This is a URL shortener written in Python using FastAPI with SQLite3 for persistent storage. <a href="https://github.com/timoteostewart/fastapi-demo-url-shortener">Source code on GitHub.</a></p>
+<p>Take it for a test drive using <a href="/fastapi-demo-url-shortener/docs">its OpenAPI interface</a>.</p>
 
-<p>Alternatively, interact with it via `curl` from a terminal:</p>
+<p>Alternatively, interact with it via `curl` from your terminal:</p>
 
 <p>PowerShell:<br/>
 curl -X 'POST' `<br/>
