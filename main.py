@@ -9,6 +9,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 from starlette.responses import RedirectResponse
 
+import config
 import my_db
 
 # pip install wheel black isort
@@ -23,7 +24,7 @@ my_db.establish_db_connection()
 
 limiter = Limiter(key_func=get_remote_address)
 app = FastAPI(
-    root_path="/"
+    root_path="/fastapi-demo-url-shortener/"
 )  # Dear User: delete or modify this `root_path` argument as your needs dictate
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
