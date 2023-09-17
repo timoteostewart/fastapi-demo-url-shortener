@@ -1,9 +1,8 @@
-
 .vscode/
 pyproject.toml
 access_log
 error_log
-
+db.sqlite3
 
 # ========================================
 # source: https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
